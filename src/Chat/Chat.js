@@ -33,7 +33,10 @@ class Chat extends Component {
       text,
       role: ROLE.CUSTOMER,
     };
-    const robotMessage = answersData.find((answer) => answer.tags.includes(text));
+    const robotMessage = answersData.find((answer) => {
+      const result = answer.tags.map((item) => text.includes(item));
+      return result.includes(true);
+    });
     if (robotMessage !== undefined) {
       this.setState((state) => {
         return {

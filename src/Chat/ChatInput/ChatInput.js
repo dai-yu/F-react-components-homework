@@ -4,7 +4,9 @@ import './ChatInput.scss';
 class ChatInput extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      value: '',
+    };
   }
 
   valueChange = (event) => {
