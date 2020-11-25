@@ -5,6 +5,7 @@ import ChatBox from './ChatBox/ChatBox';
 import ChatInput from './ChatInput/ChatInput';
 import shopData from '../data/shop.json';
 import answersData from '../data/answers.json';
+import { ROLE } from '../constants';
 
 class Chat extends Component {
   constructor(props, context) {
@@ -27,13 +28,41 @@ class Chat extends Component {
     }, 1000);
   }
 
+  sendMessage = (text) => {
+    const message = {
+      text,
+      role: ROLE.CUSTOMER,
+    };
+    const robotMessage = answersData.find((answer) => answer.tags.includes(text));
+    if (robotMessage !== undefined) {
+      this.setState((state) => {
+        return {
+          messages: state.messages.concat(message),
+        };
+      });
+      setTimeout(() => {
+        this.setState((state) => {
+          return {
+            messages: state.messages.concat(robotMessage),
+          };
+        });
+      }, 1000);
+    } else {
+      this.setState((state) => {
+        return {
+          messages: state.messages.concat(message),
+        };
+      });
+    }
+  };
+
   render() {
     const { shop, messages } = this.state;
     return (
       <main className="Chat">
         <ChatHeader shop={shop} />
         <ChatBox messages={messages} />
-        <ChatInput />
+        <ChatInput onMessageChange={this.sendMessage} />
       </main>
     );
   }
